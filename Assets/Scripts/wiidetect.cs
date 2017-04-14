@@ -24,7 +24,7 @@ public class wiidetect : MonoBehaviour
     public ReadOnlyMatrix<int> ir { get { return _ir_readonly; } }
     private ReadOnlyMatrix<int> _ir_readonly;
     private int[,] _ir;
-    bool onGround = true;
+    bool onGround = false;
 	GameObject temp;
 
 
@@ -32,12 +32,10 @@ public class wiidetect : MonoBehaviour
 
     void InitialiseWiimote()
     {
-
-        Debug.Log("This code runs");
         WiimoteManager.FindWiimotes(); // Poll native bluetooth drivers to find Wiimotes
         foreach (Wiimote remote in WiimoteManager.Wiimotes)
         {
-            Debug.Log("We found a mote");
+            
             remote.SendPlayerLED(true, false, false, true);
 
             remote.SendStatusInfoRequest();
@@ -87,7 +85,7 @@ public class wiidetect : MonoBehaviour
     {
         update_ir();
 
-		Debug.Log (temp.transform.position);
+
 
 
 
@@ -145,13 +143,10 @@ public class wiidetect : MonoBehaviour
         float[] pointer = wiimote.Ir.GetPointingPosition();
         ir_x = pointer[0];
         ir_y = pointer[1];
-        ir_x_new = ir_x * 100.0f;
-        ir_y_new = ir_y * 100.0f;
+        ir_x_new = ir_x * 10.0f;
+        ir_y_new = ir_y * 10.0f;
 		player_position_x = temp.transform.position.x;
 		player_position_y = temp.transform.position.y;
-		Debug.Log (player_position_x);
-		Debug.Log (player_position_y);
-		Debug.Log (player_position_z);
 
         
 		if (ir_x == -1.0) {
@@ -161,7 +156,9 @@ public class wiidetect : MonoBehaviour
 
 		else 
 		{
-			transform.position = new Vector3(player_position_x, player_position_y, player_position_z);
+			//transform.position = new Vector3(0, ir_y_new, 0);
+			transform.position = new Vector3(ir_x_new + player_position_x, ir_y_new + player_position_y, 0);
+
 		}
 
 
@@ -169,13 +166,20 @@ public class wiidetect : MonoBehaviour
 
     void OnCollisionEnter(Collision collisionInfo)
     {
-		temp.transform.position = new Vector3 (0, 0, 0);
 		Debug.Log ("This is colliding");
+
+		temp.transform.Translate(Vector3.forward * Time.deltaTime * 100);
+
+
+		Debug.Log ("This is colliding");
+
+
     }
 
 
     void OnCollisionExit(Collision collisionInfo)
     {
+
         Debug.Log("not colliding anymore");
     }
 
