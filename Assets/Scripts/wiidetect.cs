@@ -147,6 +147,8 @@ public class wiidetect : MonoBehaviour
         ir_y_new = ir_y * 10.0f;
 		player_position_x = temp.transform.position.x;
 		player_position_y = temp.transform.position.y;
+		Debug.Log (ir_x);
+		Debug.Log (ir_y);
 
         
 		if (ir_x == -1.0) {
@@ -157,7 +159,7 @@ public class wiidetect : MonoBehaviour
 		else 
 		{
 			//transform.position = new Vector3(0, ir_y_new, 0);
-			transform.position = new Vector3(ir_x_new + player_position_x, ir_y_new + player_position_y, 0);
+			transform.position = new Vector3(player_position_x + ir_x, ir_y + player_position_y, 0);
 
 		}
 
@@ -168,7 +170,7 @@ public class wiidetect : MonoBehaviour
     {
 		Debug.Log ("This is colliding");
 
-		temp.transform.Translate(Vector3.forward * Time.deltaTime * 100);
+		temp.transform.Translate(Vector3.back * Time.deltaTime * 100);
 
 
 		Debug.Log ("This is colliding");
